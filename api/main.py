@@ -2,6 +2,7 @@ import csv
 import io
 import json
 import os
+import socket
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -70,7 +71,7 @@ def log_prediction(user, label, features):
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "classes": len(classes)}
+    return {"status": "ok", "classes": len(classes), "instance": socket.gethostname()}
 
 
 @app.post("/predict")
@@ -100,7 +101,11 @@ async def predict(file: UploadFile = File(...), user: str = Depends(get_user)):
 
 @app.get("/usage")
 def get_usage(user: str = Depends(get_user)):
-    return {"user": user, "requests": usage[user]}
+    n = 0
+    if LOG_FILE.exists():
+        with LOG_FILE.open() as f:
+            n = sum(1 for line in f if json.loads(line)["user"] == user)
+    return {"user": user, "requests": n}
 
 
 @app.get("/drift")
