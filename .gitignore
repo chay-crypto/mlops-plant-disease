@@ -4,3 +4,4 @@ models/
 mlruns/
 __pycache__/
 .env
+logs/

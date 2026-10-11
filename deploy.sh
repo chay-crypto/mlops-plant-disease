@@ -7,7 +7,7 @@ KEY="${KEY:-$HOME/.ssh/mlops-key.pem}"
 echo "Envoi du code et du modèle vers $HOST..."
 rsync -az --delete -e "ssh -i $KEY" \
   --exclude '.venv' --exclude 'data' --exclude 'mlruns' \
-  --exclude '.git' --exclude '.env' \
+  --exclude '.git' --exclude '.env' --exclude 'logs' \
   ./ "$HOST":~/app/
 
 echo "Construction et démarrage sur la VM..."

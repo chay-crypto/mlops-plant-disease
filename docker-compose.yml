@@ -8,6 +8,8 @@ services:
     env_file: .env
     volumes:
       - ./models:/models:ro
+      - ./monitoring:/app/monitoring:ro
+      - ./logs:/app/logs
     restart: unless-stopped
 
   ui:
